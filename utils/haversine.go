@@ -2,49 +2,78 @@ package utils
 
 import (
 	"math"
-	"sort"
+	"neo-wifi-api/types"
 )
 
-type Coord struct {
-	Lat  float64
-	Lon  float64
-	Name string
+const EARTH_RADIUS = 6378137.0
+
+// square returns the square of a number
+func square(num float64) float64 {
+	return num * num
 }
 
-type Result struct {
-	Point    Coord
-	Distance float64
+// degreesToRadians converts degrees to radians
+func degreesToRadians(degrees float64) float64 {
+	return degrees * math.Pi / 180.0
 }
 
-func haversine(lat1, lon1, lat2, lon2 float64) float64 {
-	const R = 6371.0 // Radio de la Tierra en km
-	dLat := (lat2 - lat1) * math.Pi / 180
-	dLon := (lon2 - lon1) * math.Pi / 180
-	lat1 = lat1 * math.Pi / 180
-	lat2 = lat2 * math.Pi / 180
+// Haversine calculates the distance between two coordinates using the Haversine formula
+func Haversine(locationA, locationB interface{}) float64 {
+	var latA, lonA, latB, lonB float64
 
-	a := math.Sin(dLat/2)*math.Sin(dLat/2) +
-		math.Cos(lat1)*math.Cos(lat2)*math.Sin(dLon/2)*math.Sin(dLon/2)
-
-	c := 2 * math.Asin(math.Sqrt(a))
-	return R * c
-}
-
-// FindClosestN devuelve los N puntos más cercanos ordenados por distancia
-func FindClosestN(origin Coord, list []Coord, n int) []Result {
-	var results []Result
-
-	for _, point := range list {
-		dist := haversine(origin.Lat, origin.Lon, point.Lat, point.Lon)
-		results = append(results, Result{Point: point, Distance: dist})
+	// Handle different data types
+	switch a := locationA.(type) {
+	case types.Coords:
+		latA = a.Lat
+		lonA = a.Lon
+		if latA == 0 && a.Latitude != 0 {
+			latA = a.Latitude
+		}
+		if lonA == 0 && a.Longitude != 0 {
+			lonA = a.Longitude
+		}
+	case types.Antenna:
+		latA = a.Lat
+		lonA = a.Lon
+	case types.City:
+		latA = a.Lat
+		lonA = a.Lon
+	case types.Airport:
+		latA = a.Lat
+		lonA = a.Lon
 	}
 
-	sort.Slice(results, func(i, j int) bool {
-		return results[i].Distance < results[j].Distance
-	})
-
-	if len(results) < n {
-		return results
+	switch b := locationB.(type) {
+	case types.Coords:
+		latB = b.Lat
+		lonB = b.Lon
+		if latB == 0 && b.Latitude != 0 {
+			latB = b.Latitude
+		}
+		if lonB == 0 && b.Longitude != 0 {
+			lonB = b.Longitude
+		}
+	case types.Antenna:
+		latB = b.Lat
+		lonB = b.Lon
+	case types.City:
+		latB = b.Lat
+		lonB = b.Lon
+	case types.Airport:
+		latB = b.Lat
+		lonB = b.Lon
 	}
-	return results[:n]
+
+	latitudeA := degreesToRadians(latA)
+	latitudeB := degreesToRadians(latB)
+	longitudeA := degreesToRadians(lonA)
+	longitudeB := degreesToRadians(lonB)
+
+	formula := square(math.Sin((latitudeB-latitudeA)/2)) +
+		math.Cos(latitudeA)*
+			math.Cos(latitudeB)*
+			square(math.Sin((longitudeB-longitudeA)/2))
+
+	distance := 2 * EARTH_RADIUS * math.Asin(math.Sqrt(formula))
+	return distance / 1000
 }

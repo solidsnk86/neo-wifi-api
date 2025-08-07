@@ -47,11 +47,11 @@ query → (opcional) nombre exacto de red WiFi para buscar una antena una ves qu
 Ejemplo:
 
 ```bash
-GET /api/closest?lat=-34.60&lon=-58.38
+GET /closest?lat=-34.60&lon=-58.38
 ```
 
 ### Ejemplo con búsqueda específica:
 
 ```bash
-GET /api/closest?lat=-34.60&lon=-58.38&query=WiFi3.0-CO-28
+GET /closest?lat=-34.60&lon=-58.38&query=WiFi3.0-CO-28
 ````

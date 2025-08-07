@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"neo-wifi-api/handlers"
 	"net/http"
-	"wifi-api/handlers"
 )
 
 func main() {
@@ -13,10 +13,9 @@ func main() {
 		log.Fatal("Error loading data:", err)
 	}
 
-	// Setup routes
+	// Routes
 	http.HandleFunc("/", handlers.WifiHandler)
 
-	// Start server
 	port := ":8080"
 	fmt.Printf("Server starting on port %s\n", port)
 	log.Fatal(http.ListenAndServe(port, nil))

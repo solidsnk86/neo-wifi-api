@@ -5,6 +5,7 @@ import (
 	"log"
 	"neo-wifi-api/handlers"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -12,11 +13,14 @@ func main() {
 	if err := handlers.LoadData(); err != nil {
 		log.Fatal("Error loading data:", err)
 	}
+	port := os.Getenv("PORT")
 
 	// Routes
 	http.HandleFunc("/", handlers.WifiHandler)
 
-	port := ":8080"
-	fmt.Printf("Server starting on port %s\n", port)
+	if port == "" {
+		port = ":8000"
+	}
+	fmt.Printf("Server starting on port %s\n", "http://localhost"+port)
 	log.Fatal(http.ListenAndServe(port, nil))
 }

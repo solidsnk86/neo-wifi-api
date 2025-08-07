@@ -19,6 +19,7 @@ Además, permite buscar por nombre de red (`query`) para obtener datos específi
 ## 🚀 Cómo levantar el proyecto en local
 
 ### Requisitos
+
 - Go instalado (`go version`)
 - Git
 
@@ -28,3 +29,29 @@ Además, permite buscar por nombre de red (`query`) para obtener datos específi
 git clone https://github.com/solidsnk86/neo-wifi-api.git
 cd neo-wifi-api
 go run main.go
+```
+
+## 📡 Endpoints
+
+GET /api/closest
+Devuelve la ciudad, antenas y aeropuerto más cercanos a unas coordenadas dadas.
+
+Parámetros requeridos:
+
+lat → Latitud (ej: -34.60)
+
+lon → Longitud (ej: -58.38)
+
+query → (opcional) nombre exacto de red WiFi para buscar una antena una ves que se hayan proporcionado los parámetros de latitud y longitud.
+
+Ejemplo:
+
+```bash
+GET /api/closest?lat=-34.60&lon=-58.38
+```
+
+### Ejemplo con búsqueda específica:
+
+```bash
+GET /api/closest?lat=-34.60&lon=-58.38&query=WiFi3.0-CO-28
+````

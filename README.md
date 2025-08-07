@@ -25,6 +25,6 @@ Además, permite buscar por nombre de red (`query`) para obtener datos específi
 ### Pasos
 
 ```bash
-git clone https://github.com/tu-usuario/neo-wifi.git
-cd neo-wifi
+git clone https://github.com/solidsnk86/neo-wifi-api.git
+cd neo-wifi-api
 go run main.go

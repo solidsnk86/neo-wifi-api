@@ -1,8 +1,0 @@
-services:
-  - type: web
-    name: neo-wifi-api
-    env: go
-    plan: free
-    buildCommand: go build -o main .
-    startCommand: ./main
-    autoDeploy: true

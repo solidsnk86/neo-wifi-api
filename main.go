@@ -9,13 +9,13 @@ import (
 )
 
 func main() {
-	// Cargar datos al inicio
+	// Load data from files
 	if err := handlers.LoadData(); err != nil {
 		log.Fatal("Error loading data:", err)
 	}
 	port := os.Getenv("PORT")
 
-	// Routes
+	// Route handler
 	http.HandleFunc("/", handlers.WifiHandler)
 
 	if port == "" {
